@@ -1,12 +1,14 @@
-const yo = require('yo-yo')
-const LightElement = require('../lib/light-element.js')
+import * as yo from 'yo-yo'
 
-window.customElements.define('hw-publisher', class extends LightElement {
-  render() {
-    return yo`
-      <div class="publisher">
-        todo publisher
+export default function () {
+  return yo`
+    <div class="publisher">
+      <div class="publisher__input">
+        <textarea placeholder="What's happenin?"></textarea>
       </div>
-    `
-  }
-})
+      <div class="publisher__controls">
+        <button>Publish</button>
+      </div>
+    </div>
+  `
+}

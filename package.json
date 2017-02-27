@@ -1,20 +1,23 @@
 {
   "dependencies": {
+    "lodash.filter": "^4.6.0",
+    "lodash.map": "^4.6.0",
+    "lodash.toarray": "^4.4.0",
+    "moment": "^2.17.1",
     "yo-yo": "1.4.0"
   },
   "scripts": {
     "build": "npm run build:js; npm run build:css",
-    "build:js": "browserify -o main.build.js main.js",
+    "build:js": "webpack main.js main.build.js",
     "build:css": "lessc --clean-css ./scss/main.less main.css",
     "watch": "npm run watch:js &! npm run watch:css",
-    "watch:js": "watchify -o main.build.js main.js",
+    "watch:js": "webpack main.js main.build.js -w",
     "watch:css": "autoless ./scss/ ./"
   },
   "devDependencies": {
     "autoless": "^0.1.7",
-    "browserify": "^14.0.0",
     "less": "^2.7.2",
     "less-plugin-clean-css": "^1.5.1",
-    "watchify": "^3.9.0"
+    "webpack": "^2.2.1"
   }
 }
