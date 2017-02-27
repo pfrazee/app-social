@@ -1,5 +1,6 @@
 import filter from 'lodash.filter'
 import map from 'lodash.map'
+import {render} from '../lib/bus'
 
 // globals
 // =
@@ -46,6 +47,42 @@ export async function load () {
   return true
 }
 
+export async function addFollow (url) {
+  if (!localUser) return
+
+  // make sure it doesn't already exist
+  if (localUser.profile.follows.find(f => f.url === url)) {
+    return
+  }
+
+  try {
+    render('follows', {loading: true})
+
+    // lookup user
+    var user = await loadUser(url)
+
+    // add
+    localUser.profile.follows.push({
+      name: user.profile.name,
+      url
+    })
+    await saveUserProfile(localUser)
+    render('follows')
+  } catch (e) {
+    console.error(e)
+    render('follows', {error: e})
+    console.log('did it')
+  }
+}
+
+export async function removeFollow (url) {
+  if (!localUser) return
+  var i = localUser.profile.follows.findIndex(f => f.url === url)
+  localUser.profile.follows.splice(i, 1)
+  await saveUserProfile(localUser)
+  render('follows')
+}
+
 // internal methods
 // =
 
@@ -56,9 +93,10 @@ async function loadUser (url) {
     encoding: 'utf8',
     timeout: 10e3
   })
-  var [profileJson, postEntries] = await Promise.all([
+  var [profileJson, postEntries, avatar] = await Promise.all([
     profileJsonRead.catch(err => false), // suppress a failed read
-    user.listFiles('/social/posts')
+    user.listFiles('/social/posts'),
+    user.stat('/social/avatar.png').catch(() => false)
   ])
 
   // parse profile
@@ -79,8 +117,13 @@ async function loadUser (url) {
   })
 
   // attach to user object
+  user.aviUrl = (!!avatar) ? `${user.url}/social/avatar.png` : '/default_avi.jpeg'
   user.profile = profileJson
   user.posts = filter(postEntries, entry => entry.name.endsWith('.json'))
   user.isLocalUser = false
   return user
+}
+
+async function saveUserProfile (user) {
+  await user.writeFile('/social/profile.json', JSON.stringify(user.profile, null, 2), 'utf8')
 }

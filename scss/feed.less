@@ -4,9 +4,22 @@
 }
 
 .feed-item {
+  display: flex;
   border-bottom: 1px solid #ddd;
   padding: 1rem;
 
+  &__layout-side {
+    flex: 0 0 60px;
+  }
+  &__layout-main {
+    flex: 1;
+  }
+
+  &__avi {
+    display: block;
+    width: 50px;
+    border-radius: 5px;
+  }
   &__header {
     font-size: 0.85rem;
     margin-bottom: 0.25rem;

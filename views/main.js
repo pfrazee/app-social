@@ -2,7 +2,7 @@ import * as yo from 'yo-yo'
 import {register} from '../lib/bus'
 import {feed, feedItem} from '../com/feed'
 import profile from '../com/profile'
-import sources from '../com/sources'
+import follows from '../com/follows'
 import feedModel from '../model/feed'
 
 const byId = document.getElementById.bind(document)
@@ -10,6 +10,9 @@ const byId = document.getElementById.bind(document)
 register('main', update, {
   post: (id, data) => {
     yo.update(byId(id), feedItem(data))
+  },
+  follows: (opts) => {
+    yo.update(byId('follows'), follows(opts))
   }
 })
 
@@ -23,7 +26,7 @@ function update () {
         ${feed()}
       </div>
       <div class="layout--side">
-        ${sources()}
+        ${follows()}
       </div>
     </div>
   `)
