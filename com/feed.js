@@ -5,7 +5,7 @@ import {getPosts} from '../model/feed'
 
 export function feed () {
   return yo`
-    <div class="feed card">
+    <div id="feed" class="feed card">
       ${publisher()}
       ${getPosts().map(post => {
         return feedItem(post)

@@ -8,6 +8,9 @@ import feedModel from '../model/feed'
 const byId = document.getElementById.bind(document)
 
 register('main', update, {
+  feed: () => {
+    yo.update(byId('feed'), feed())
+  },
   post: (id, data) => {
     yo.update(byId(id), feedItem(data))
   },

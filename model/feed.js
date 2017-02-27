@@ -1,4 +1,4 @@
-import {getFeedUsers} from './users'
+import {getLocalUser, getFeedUsers} from './users'
 import {render} from '../lib/bus'
 
 // globals
@@ -34,6 +34,24 @@ export function getPosts({start, end} = {}) {
   var postsSlice = posts.slice(start, end)
   ensurePostsAreLoaded(postsSlice)
   return postsSlice
+}
+
+export async function publish(body) {
+  var localUser = getLocalUser() 
+  body = body.trim()
+  if (!body || !localUser) return
+
+  // write the file
+  var path = `/social/posts/${Date.now()}.json`
+  await localUser.writeFile(path, JSON.stringify({body}, null, 2), 'utf8')
+
+  // read back
+  var post = await localUser.stat(path)
+  post.id = `${localUser.url}-${post.name}`
+  post.author = localUser
+  posts.unshift(post)
+  render('feed')
+  loadPost(post)
 }
 
 // internal api
