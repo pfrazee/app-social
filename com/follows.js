@@ -1,9 +1,9 @@
 import * as yo from 'yo-yo'
-import {getLocalUser, addFollow, removeFollow, getFeedUsers} from '../model/users'
+import {getLocalUser, addFollow, removeFollow} from '../model/users'
 
 export default function ({loading, error} = {}) {
   var user = getLocalUser()
-  if (!user) return defaultFollows()
+  if (!user) return ''
   return yo`
     <div id="follows" class="follows card">
       <div class="follows__list">
@@ -15,18 +15,6 @@ export default function ({loading, error} = {}) {
       <div class="follows__adder">
         <input id="follows__adder-url" placeholder="URL of new user">
         <button onclick=${onClickAdd}>Add</button>
-      </div>
-    </div>
-  `
-}
-
-function defaultFollows () {
-  return yo`
-    <div id="follows" class="follows card">
-      <div class="follows__list">
-        <div>Some users you might want to follow:</div>
-        ${getFeedUsers().map(u => userCom(u))}
-        <br>
       </div>
     </div>
   `

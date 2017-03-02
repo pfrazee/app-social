@@ -1,7 +1,9 @@
 import * as yo from 'yo-yo'
 import {publish} from '../model/feed'
+import {getLocalUser} from '../model/users'
 
 export default function () {
+  if (!getLocalUser()) return ''
   return yo`
     <div class="publisher">
       <div class="publisher__input">

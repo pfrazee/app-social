@@ -3,6 +3,7 @@ import {register} from '../lib/bus'
 import {feed, feedItem} from '../com/feed'
 import profile from '../com/profile'
 import follows from '../com/follows'
+import suggestedFollows from '../com/suggested-follows'
 import feedModel from '../model/feed'
 
 const byId = document.getElementById.bind(document)
@@ -30,6 +31,7 @@ function update () {
       </div>
       <div class="layout--side">
         ${follows()}
+        ${suggestedFollows()}
       </div>
     </div>
   `)
