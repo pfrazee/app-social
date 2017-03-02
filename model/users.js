@@ -1,6 +1,7 @@
 import filter from 'lodash.filter'
 import map from 'lodash.map'
 import {render} from '../lib/bus'
+import {DEFAULT_FOLLOWS} from '../lib/const'
 
 // globals
 // =
@@ -20,7 +21,7 @@ export function getLocalUserUrl () {
 
 export async function load () {
   var url = getLocalUserUrl()
-  if (!url) return false
+  if (!url) return loadDefaults()
 
   // load the local user
   localUser = await loadUser(url)
@@ -86,6 +87,13 @@ export async function removeFollow (url) {
 // internal methods
 // =
 
+async function loadDefaults () {
+  feedUsers = await Promise.all(DEFAULT_FOLLOWS.map(url => {
+    return loadUser(url).catch(err => null)
+  }))
+  feedUsers = feedUsers.filter(Boolean)
+}
+
 async function loadUser (url) {
   // read info
   var user = new DatArchive(url)
@@ -117,7 +125,7 @@ async function loadUser (url) {
   })
 
   // attach to user object
-  user.aviUrl = (!!avatar) ? `${user.url}/social/avatar.png` : '/default_avi.jpeg'
+  user.aviUrl = (!!avatar) ? `${user.url}/social/avatar.png` : '/default_avi.png'
   user.profile = profileJson
   user.posts = filter(postEntries, entry => entry.name.endsWith('.json'))
   user.isLocalUser = false
