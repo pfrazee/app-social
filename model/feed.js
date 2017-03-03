@@ -1,6 +1,6 @@
 window.model = window.model || {}
 {
-  const {getLocalUser, getFeedUsers} = window.model.users
+  const {getLocalSite, getFeedSites} = window.model.sites
   const {render} = window.bus
 
   // state
@@ -12,14 +12,14 @@ window.model = window.model || {}
   // =
 
   window.model.feed = {
-    // read and merge all of the post entries of users in the feed
+    // read and merge all of the post entries of sites in the feed
     async load () {
-      // get all users and their entries
-      var users = getFeedUsers()
-      if (!users.length) return
+      // get all sites and their entries
+      var sites = getFeedSites()
+      if (!sites.length) return
 
       // merge the entries
-      posts = users.map(u => u.posts)
+      posts = sites.map(u => u.posts)
       posts = posts[0].concat(...posts.slice(1))
       posts.sort((a, b) => {
         // sort by creation time
@@ -40,18 +40,18 @@ window.model = window.model || {}
     },
 
     async publish(body) {
-      var localUser = getLocalUser() 
+      var localSite = getLocalSite() 
       body = body.trim()
-      if (!body || !localUser) return
+      if (!body || !localSite) return
 
       // write the file
-      var path = `/social/posts/${Date.now()}.json`
-      await localUser.writeFile(path, JSON.stringify({body}, null, 2), 'utf8')
+      var path = `/microblog/${Date.now()}.json`
+      await localSite.writeFile(path, JSON.stringify({body}, null, 2), 'utf8')
 
       // read back
-      var post = await localUser.stat(path)
-      post.id = `${localUser.url}-${post.name}`
-      post.author = localUser
+      var post = await localSite.stat(path)
+      post.id = `${localSite.url}-${post.name}`
+      post.author = localSite
       posts.unshift(post)
       render('feed')
       loadPost(post)

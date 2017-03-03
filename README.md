@@ -1,29 +1,40 @@
-# app://social
+# Microblog site template
 
-## Profile site file structure
+## Site structure
 
-### /social/avatar.png
+The site's feed can interact with any other site that follows this structure.
 
-User picture
+### /favicon.png
 
-### /social/profile.json
+Site icon (optional)
 
-User info
+### /dat.json
+
+General site info (required)
 
 ```
 {
-  name: string, the shortname of the user
-  bio: string, the user's bio
+  title: string, the shortname of the site
+  description: string
+}
+```
+
+### /microblog.json
+
+Micro-blog site info (optional)
+
+```
+{
   follows: [{
-    url: string, url of the followed user
-    title: string, the shortname of the followed user
+    url: string, url of the followed site
+    title: string, the shortname of the followed site
   }]
 }
 ```
 
-### /social/posts/*.json
+### /microblog/*.json
 
-User posts
+Micro-blog posts
 
 ```
 {

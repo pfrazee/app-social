@@ -42,20 +42,12 @@ a:hover {
 }
 
 .feed-item {
-  display: flex;
   border-bottom: 1px solid #ddd;
   padding: 1rem;
 }
-.feed-item__layout-side {
-  flex: 0 0 60px;
-}
-.feed-item__layout-main {
-  flex: 1;
-}
-.feed-item__avi {
-  display: block;
-  width: 50px;
-  border-radius: 5px;
+.feed-item__favicon {
+  width: 16px;
+  height: 16px;
 }
 .feed-item__header {
   margin-bottom: 0.25rem;
@@ -81,11 +73,9 @@ a:hover {
 .publisher .publisher__controls {
   text-align: right;
 }
-.profile__avi {
-  width: 75px;
-  border-radius: 5px;
-  float: left;
-  margin-right: 1rem;
+.profile__favicon {
+  width: 16px;
+  margin-right: 5px;
 }
 .profile__name {
   margin: 0;

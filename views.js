@@ -27,7 +27,6 @@ window.views = {}
         </div>
         <div class="layout--side">
           ${follows()}
-          ${suggestedFollows()}
         </div>
       </div>
     `)
