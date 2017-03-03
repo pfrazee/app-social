@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  font-weight: 300;
+}
+
+.layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+}
+.layout .layout--main {
+  flex: 1;
+}
+.layout .layout--side {
+  flex: 0 0 300px;
+  padding: 0 1rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.feed {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.feed-item {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem;
+}
+.feed-item__layout-side {
+  flex: 0 0 60px;
+}
+.feed-item__layout-main {
+  flex: 1;
+}
+.feed-item__avi {
+  display: block;
+  width: 50px;
+  border-radius: 5px;
+}
+.feed-item__header {
+  margin-bottom: 0.25rem;
+}
+.feed-item__author {
+  font-weight: bold;
+}
+
+.publisher {
+  border-bottom: 1px solid #ddd;
+  padding: 0.7rem;
+}
+.publisher .publisher__input textarea {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border-color: #ddd;
+  border-radius: 2px;
+  width: 100%;
+  resize: none;
+  font-weight: 300;
+  height: 4rem;
+}
+.publisher .publisher__controls {
+  text-align: right;
+}
+.profile__avi {
+  width: 75px;
+  border-radius: 5px;
+  float: left;
+  margin-right: 1rem;
+}
+.profile__name {
+  margin: 0;
+}
+.profile__bio {
+  margin: .5rem 0;
+  font-weight: 300;
+}
+.profile__stats {
+  margin-top: .5rem;
+}
+
+.follows {
+  padding: 0;
+}
+.follows__list {
+  padding: 1rem;
+}
+.follows__adder {
+  background: #fdfdfd;
+  display: flex;
+  padding: 0.5rem;
+  border-top: 1px solid #ddd;
+}
+.follows__adder input {
+  flex: 1;
+}
+.follows__adder button {
+  margin-left: 5px;
+}
