@@ -24,7 +24,7 @@ window.com = {}
         <a href="#" class="feed-item__time">${timeSince(post.ctime || post.mtime)}</a>          
       </div>
       <div class="feed-item__content">
-        ${post.data && post.data.body ? post.data.body : 'Loading...'}
+        ${typeof post.text === 'string' ? post.text : 'Loading...'}
       </div>
     </div>
   `

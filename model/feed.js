@@ -39,27 +39,27 @@ window.model = window.model || {}
       return postsSlice
     },
 
-    async publish(body) {
+    async publish(text) {
       var selfSite = getSelfSite() 
-      body = body.trim()
-      if (!body || !selfSite) return
+      text = text.trim()
+      if (!text || !selfSite) return
 
       // write the file
-      var path = `/microblog/${Date.now()}.json`
+      var path = `/microblog/${Date.now()}.txt`
       try {
         await selfSite.createDirectory('/microblog')
       } catch (e) {
         // ignore, just needed to make sure the folder exists
       }
-      await selfSite.writeFile(path, JSON.stringify({body}, null, 2), 'utf8')
+      await selfSite.writeFile(path, text, 'utf8')
 
       // read back
       var post = await selfSite.stat(path)
       post.id = `${selfSite.url}-${post.name}`
       post.author = selfSite
+      post.text = text
       posts.unshift(post)
       render('feed')
-      loadPost(post)
     }
   }
 
@@ -68,7 +68,7 @@ window.model = window.model || {}
 
   function ensurePostsAreLoaded (postsSlice) {
     postsSlice.forEach(post => {
-      if (!post.data) {
+      if (!post.text) {
         loadPost(post)
       }
     })
@@ -77,8 +77,7 @@ window.model = window.model || {}
   async function loadPost (post) {
     try {
       // read file
-      var json = await post.author.readFile(post.name)
-      post.data = JSON.parse(json)
+      post.text = await post.author.readFile(post.name, 'utf8')
       // render
       render('post', post.id, post)
     } catch (e) {

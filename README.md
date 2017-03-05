@@ -32,12 +32,6 @@ Micro-blog site info (optional)
 }
 ```
 
-### /microblog/*.json
+### /posts/*.txt
 
-Micro-blog posts
-
-```
-{
-  body: string
-}
-```
+Micro-blog posts. Unstructured text.
