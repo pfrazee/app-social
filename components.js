@@ -17,9 +17,7 @@ window.com = {}
       }).join('')}
       ${currentMax < getNumPosts() ? `
         <div class="feed-item">
-          <div class="feed-item__content">
-            <a href="#" onclick="onClickLoadMore(event)">Load more</a>
-          </div>
+          <div class="feed-item__content"><a href="#" onclick="onClickLoadMore(event)">Load more</a></div>
         </div>` : ''}
     </div>
   `
@@ -32,13 +30,13 @@ window.com = {}
 
   const feedItem =
   window.com.feedItem = (post) => `
-    <div class="feed-item" id=${post.url}>
+    <div class="feed-item" id=${makeSafe(post.url)}>
       <div class="feed-item__header">
-        <img class="feed-item__favicon" src="${post.author.url}/favicon.png" />
-        <a href="${post.author.url}" class="feed-item__author">${post.author.title}</a>
-        <a href="${post.url}" class="feed-item__time">${timeSince(post.ctime || post.mtime)} ago</a>          
+        <img class="feed-item__favicon" src="${makeSafe(post.author.url)}/favicon.png" />
+        <a href="${makeSafe(post.author.url)}" class="feed-item__author">${makeSafe(post.author.title)}</a>
+        <a href="${makeSafe(post.url)}" class="feed-item__time">${makeSafe(timeSince(post.ctime || post.mtime))} ago</a>          
       </div>
-      <div class="feed-item__content">${typeof post.text === 'string' ? post.text : 'Loading...'}</div>
+      <div class="feed-item__content">${makeSafe(typeof post.text === 'string' ? post.text : 'Loading...')}</div>
     </div>
   `
 }
@@ -58,7 +56,7 @@ window.com = {}
           <div><strong>Following</strong></div>
           ${site.follows.map(u => userCom(u, site.isOwner && !site.isTemplate))}
           ${loading ? `<div>Loading...</div>` : ''}
-          ${error ? `<div class="error">${error.toString()}</div>` : ''}
+          ${error ? `<div class="error">${makeSafe(error.toString())}</div>` : ''}
         </div>
         ${site.isOwner ? `
           <div class="follows__adder">
@@ -76,8 +74,8 @@ window.com = {}
       url = `dat://${url}`
     }
     return `<div>
-      <a href=${url}>${site.givenTitle || site.title}</a>
-      ${canDelete ? `<button onclick="onClickRemoveFollow('${site.url}')">Remove</button>` : ''}
+      <a href="${makeSafe(url)}">${makeSafe(site.givenTitle || site.title)}</a>
+      ${canDelete ? `<button onclick="onClickRemoveFollow('${makeSafe(site.url)}')">Remove</button>` : ''}
     </div>`
   }
 
@@ -104,12 +102,12 @@ window.com = {}
       <div class="profile">
         <div class="card">
           <h3 class="profile__name">
-            <a href="${site.url}">
-              <img class="profile__favicon" src=${site.url + '/favicon.png'} />
-              ${site.title}
+            <a href="${makeSafe(site.url)}">
+              <img class="profile__favicon" src=${makeSafe(site.url) + '/favicon.png'} />
+              ${makeSafe(site.title)}
             </a>
           </h3>
-          <div class="profile__bio">${site.description}</div>
+          <div class="profile__bio">${makeSafe(site.description)}</div>
           ${site.isTemplate ? `
             <div class="profile__fork">
               <hr>

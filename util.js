@@ -44,6 +44,16 @@ window.DEFAULT_FOLLOWS = [
 
   window.byId = document.getElementById.bind(document)
 
+  window.makeSafe = (value) => {
+    return (''+value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+      .replace(/`/g, '&#x60;')
+  }
+
   window.updateNode = (targetId, newHTML) => {
     // find the target
     var targetEl = byId(targetId)
