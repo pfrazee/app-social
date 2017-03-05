@@ -27,10 +27,16 @@ window.model = window.model || {}
       document.title = selfSite.title
 
       // debugging tool
-      if (localStorage.debugLoggedIn) {
+      if (localStorage.debugMode === 'loggedin') {
         selfSite.isOwner = true
-      } else if (localStorage.debugLoggedOut) {
+        selfSite.isFork = true
+        selfSite.isTemplate = false
+      } else if (localStorage.debugMode === 'loggedout') {
         selfSite.isOwner = false
+        selfSite.isTemplate = false
+      } else if (localStorage.debugMode === 'template') {
+        selfSite.isFork = false
+        selfSite.isTemplate = true
       }
 
       // load self's follows

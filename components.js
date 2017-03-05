@@ -43,14 +43,14 @@ window.com = {}
       <div id="follows" class="follows card">
         <div class="follows__list">
           <div><strong>Following</strong></div>
-          ${site.follows.map(u => userCom(u, true))}
+          ${site.follows.map(u => userCom(u, site.isOwner && !site.isTemplate))}
           ${loading ? `<div>Loading...</div>` : ''}
           ${error ? `<div class="error">${error.toString()}</div>` : ''}
         </div>
         ${site.isOwner ? `
           <div class="follows__adder">
             <input id="follows__adder-url" placeholder="URL of new site">
-            <button onclick=${onClickAdd}>Add</button>
+            <button onclick="onClickAddFollow()">Add</button>
           </div>
         ` : ''}
       </div>
@@ -64,13 +64,17 @@ window.com = {}
     }
     return `<div>
       <a href=${url}>${site.givenTitle || site.title}</a>
-      ${canDelete ? `<button onclick=${() => removeFollow(site.url)}>Remove</button>` : ''}
+      ${canDelete ? `<button onclick="onClickRemoveFollow('${site.url}')">Remove</button>` : ''}
     </div>`
   }
 
-  function onClickAdd (e) {
+  window.onClickAddFollow = () => {
     var input = document.getElementById('follows__adder-url')
     addFollow(input.value)
+  }
+
+  window.onClickRemoveFollow = (url) => {
+    removeFollow(url)
   }
 }
 
@@ -97,13 +101,33 @@ window.com = {}
             <div class="profile__fork">
               <hr>
               <div>
-                <button>Fork this site</button> to create a profile.                
+                <button onclick="onClickFork()">Fork this site</button> to create a profile.
+              </div>
+            </div>
+          ` : site.isSelf ? `
+            <div class="profile__fork">
+              <hr>
+              <div>
+                <button onclick="onClickEditProfile()">Edit your profile</button>
               </div>
             </div>
           ` : ''}
         </div>
       </div>
     `
+  }
+
+  window.onClickFork = () => {
+    DatArchive.fork(window.location.toString(), {
+      title: 'Your Name',
+      description: 'Your bio'
+    }).then(archive => {
+      window.location = archive.url
+    })
+  }
+
+  window.onClickEditProfile = () => {
+    getSelfSite().updateManifest().then(() => window.location.reload())
   }
 }
 
@@ -115,21 +139,50 @@ window.com = {}
   const {getSelfSite} = window.model.sites
 
   window.com.publisher = () => {
-    if (!getSelfSite()/*TODO*/) return ''
+    var selfSite = getSelfSite()
+    if (!selfSite || !selfSite.isOwner) return ''
     return `
       <div class="publisher">
         <div class="publisher__input">
           <textarea placeholder="What's happenin?"></textarea>
         </div>
         <div class="publisher__controls">
-          <button onclick=${onPublish}>Publish</button>
+          <button onclick="onClickPublish()">Publish</button>
         </div>
       </div>
     `
   }
 
-  function onPublish () {
+  window.onClickPublish = () => {
     var textarea = document.querySelector('.publisher__input textarea')
     publish(textarea.value)
+  }
+}
+
+// user tools
+// =
+
+{
+  const {getSelfSite} = window.model.sites
+
+  window.com.userTools = () => {
+    var selfSite = getSelfSite()
+    if (!selfSite) return ''
+    if (selfSite.isOwner) {
+      return `<div class="user-tools">
+        <button onclick="setDebugMode('loggedout')">View as visitor</button>
+      </div>`
+    } else if (!selfSite.isTemplate) {
+      return `<div class="user-tools">
+        <button onclick="setDebugMode(false)">Return to owner view</button>
+      </div>`
+    }
+    return ''
+  }
+
+  window.setDebugMode = (mode) => {
+    if (!mode) delete localStorage.debugMode
+    else localStorage.debugMode = mode
+    window.location.reload()
   }
 }

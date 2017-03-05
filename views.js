@@ -2,17 +2,16 @@ window.views = {}
 {
   const {updateNode} = window
   const {register} = window.bus
-  const {feed, feedItem, profile, follows, suggestedFollows} = window.com
 
   register('main', updateAll, {
     feed: () => {
-      updateNode('feed', feed())
+      updateNode('feed', com.feed())
     },
     post: (id, data) => {
-      updateNode(id, feedItem(data))
+      updateNode(id, com.feedItem(data))
     },
     follows: (opts) => {
-      updateNode('follows', follows(opts))
+      updateNode('follows', com.follows(opts))
     }
   })
 
@@ -20,13 +19,14 @@ window.views = {}
     updateNode('main-layout', `
       <div id="main-layout" class="layout">
         <div class="layout--side">
-          ${profile()}
+          ${com.profile()}
         </div>
         <div class="layout--main">
-          ${feed()}
+          ${com.feed()}
         </div>
         <div class="layout--side">
-          ${follows()}
+          ${com.follows()}
+          ${com.userTools()}
         </div>
       </div>
     `)

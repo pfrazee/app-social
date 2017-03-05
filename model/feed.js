@@ -1,6 +1,6 @@
 window.model = window.model || {}
 {
-  const {getLocalSite, getFeedSites} = window.model.sites
+  const {getSelfSite, getFeedSites} = window.model.sites
   const {render} = window.bus
 
   // state
@@ -40,18 +40,23 @@ window.model = window.model || {}
     },
 
     async publish(body) {
-      var localSite = getLocalSite() 
+      var selfSite = getSelfSite() 
       body = body.trim()
-      if (!body || !localSite) return
+      if (!body || !selfSite) return
 
       // write the file
       var path = `/microblog/${Date.now()}.json`
-      await localSite.writeFile(path, JSON.stringify({body}, null, 2), 'utf8')
+      try {
+        await selfSite.createDirectory('/microblog')
+      } catch (e) {
+        // ignore, just needed to make sure the folder exists
+      }
+      await selfSite.writeFile(path, JSON.stringify({body}, null, 2), 'utf8')
 
       // read back
-      var post = await localSite.stat(path)
-      post.id = `${localSite.url}-${post.name}`
-      post.author = localSite
+      var post = await selfSite.stat(path)
+      post.id = `${selfSite.url}-${post.name}`
+      post.author = selfSite
       posts.unshift(post)
       render('feed')
       loadPost(post)
