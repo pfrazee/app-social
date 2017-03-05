@@ -20,6 +20,7 @@ window.views = {}
       <div id="main-layout" class="layout">
         <div class="layout--side">
           ${com.profile()}
+          <div>Confused? <a href="/README.md">Read me.</a></div>
         </div>
         <div class="layout--main">
           ${com.feed()}

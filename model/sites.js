@@ -110,7 +110,7 @@ window.model = window.model || {}
 
     // turn postEntries into an array with a ref back to the site
     postEntries = map(postEntries, entry => {
-      entry.id = `${site.url}-${entry.name}`
+      entry.url = `${site.url}${entry.name}`
       entry.author = site
       return entry
     })
@@ -122,7 +122,7 @@ window.model = window.model || {}
     site.title = info.title
     site.description = info.description
     site.follows = microBlogJson.follows || []
-    site.posts = postEntries.filter(entry => entry.name.endsWith('.json'))
+    site.posts = postEntries.filter(entry => entry.name.endsWith('.txt'))
     return site
   }
 

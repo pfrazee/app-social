@@ -31,6 +31,10 @@ window.model = window.model || {}
       })
     },
 
+    getNumPosts() {
+      return posts.length
+    },
+
     getPosts({start, end} = {}) {
       start = start || 0
       end = end || 20
@@ -55,7 +59,7 @@ window.model = window.model || {}
 
       // read back
       var post = await selfSite.stat(path)
-      post.id = `${selfSite.url}-${post.name}`
+      post.url = `${selfSite.url}${post.name}`
       post.author = selfSite
       post.text = text
       posts.unshift(post)
@@ -79,11 +83,11 @@ window.model = window.model || {}
       // read file
       post.text = await post.author.readFile(post.name, 'utf8')
       // render
-      render('post', post.id, post)
+      render('post', post.url, post)
     } catch (e) {
       // render error
       console.error('Error while loading post', e)
-      render('post', post.id, {error: e})
+      render('post', post.url, {error: e})
     }
   }
 }

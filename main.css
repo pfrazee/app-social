@@ -55,6 +55,11 @@ a:hover {
 .feed-item__author {
   font-weight: bold;
 }
+.feed-item__content {
+  white-space: pre-line;
+  max-height: 200px;
+  overflow: hidden;
+}
 
 .publisher {
   border-bottom: 1px solid #ddd;

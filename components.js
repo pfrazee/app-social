@@ -4,28 +4,41 @@ window.com = {}
 // =
 
 {
-  const {getPosts} = window.model.feed
+  const {render} = window.bus
+  const {getPosts, getNumPosts} = window.model.feed
+
+  var currentMax = 20
 
   window.com.feed = () => `
     <div id="feed" class="feed card">
       ${com.publisher()}
-      ${getPosts().map(post => {
+      ${getPosts({ end: currentMax }).map(post => {
         return feedItem(post)
       }).join('')}
+      ${currentMax < getNumPosts() ? `
+        <div class="feed-item">
+          <div class="feed-item__content">
+            <a href="#" onclick="onClickLoadMore(event)">Load more</a>
+          </div>
+        </div>` : ''}
     </div>
   `
 
+  window.onClickLoadMore = (e) => {
+    e.preventDefault()
+    currentMax += 20
+    render('feed')
+  }
+
   const feedItem =
   window.com.feedItem = (post) => `
-    <div class="feed-item" id=${post.id}>
+    <div class="feed-item" id=${post.url}>
       <div class="feed-item__header">
         <img class="feed-item__favicon" src="${post.author.url}/favicon.png" />
-        <a href="#" class="feed-item__author">${post.author.title}</a>
-        <a href="#" class="feed-item__time">${timeSince(post.ctime || post.mtime)}</a>          
+        <a href="${post.author.url}" class="feed-item__author">${post.author.title}</a>
+        <a href="${post.url}" class="feed-item__time">${timeSince(post.ctime || post.mtime)} ago</a>          
       </div>
-      <div class="feed-item__content">
-        ${typeof post.text === 'string' ? post.text : 'Loading...'}
-      </div>
+      <div class="feed-item__content">${typeof post.text === 'string' ? post.text : 'Loading...'}</div>
     </div>
   `
 }
